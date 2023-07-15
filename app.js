@@ -84,7 +84,7 @@ app.post('/sign_up', function (req, res) {
                     console.log('Email sent: ' + info.response);
                 }
             });
-            return res.redirect('/views/form.ejs');
+            return res.send('Confirmed!! You will get a mail soon!');
             };
     })
 
