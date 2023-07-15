@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Laser Cutting Booking</title>
+</head>
+<body>
+  <!-- views/bookings/new.ejs -->
+  <h1>New Booking</h1>
+  
+  
+  
+      <form action="/sign_up" method="POST">
+        <label for="user">User</label>
+        <input type="text" name="name" id="user"><br><br>
+        <label for="startTime">Start Time:</label>
+        <input type="datetime-local" id="startTime" name="start" required>
+        <br><br>
+        <label for="endTime">End Time:</label>
+        <input type="datetime-local" id="endTime" name="end" required>
+        <br><br>
+        <!-- <label for="status">Status:</label> -->
+        <input type="text" id="status" name="status" value="Approved" style="display: none;"><br><br>
+        <button type="submit">Book Now</button>
+      </form>
+
+</body>
+</html>

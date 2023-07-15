@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Documents</title>
+  <style>
+    td{
+        border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <h1>All Bookings</h1>
+    <table>
+        <tr>
+            <td>
+                <strong>User</strong>
+            </td>
+            <td>
+                <strong>
+                    Start Time
+    
+                </strong>
+            </td>
+            <td>
+                <strong>
+                    End Time
+                </strong>
+            </td>
+            <td>
+                <strong>
+                    Status
+                </strong>
+            </td>
+        </tr>
+    
+        <tr>
+            <% ans.forEach(function(doc) { %>
+            <td>
+                <%= doc.user %>
+            </td>
+            <td>
+                <%= doc.startTime %>
+            </td>
+            <td>
+                   <%= doc.endTime %>
+                
+            </td>
+            <td>
+                <%= doc.status %>
+            </td>
+        </tr>
+
+    <% }); %>
+  </ul>
+</body>
+<script src="
+https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+</html>
