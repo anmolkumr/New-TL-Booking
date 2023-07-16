@@ -7,7 +7,10 @@
         border: 1px solid black;
     }
   </style>
+<script src="
+https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
 </head>
+
 <body>
   <h1>All Bookings</h1>
     <table>
@@ -39,11 +42,12 @@
                 <%= doc.user %>
             </td>
             <td>
-                <%= doc.startTime %>
+                <%=doc.startTime %>
             </td>
             <td>
-                   <%= doc.endTime %>
-                
+          
+            <%=doc.endTime %>
+           
             </td>
             <td>
                 <%= doc.status %>
@@ -53,6 +57,5 @@
     <% }); %>
   </ul>
 </body>
-<script src="
-https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
+
 </html>

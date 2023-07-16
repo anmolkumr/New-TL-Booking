@@ -1,22 +1,46 @@
 {
 
-  "name": "TL-Booking_MERN",
+  "name": "TLBookingMERN",
+
   "version": "1.0.0",
+
   "description": "TL-Booking_MERN",
+
   "main": "app.js",
+
   "scripts": {
+
     "start": "node app.js",
+
     "test": "echo \"Error: no test specified\" && exit 1"
+
   },
 
   "author": "Anmol Kumar",
+
   "license": "ISC",
+
   "dependencies": {
+
     "body-parser": "^1.20.2",
+
     "ejs": "^3.1.9",
+
     "express": "^4.18.2",
+
+    "moment": "^2.29.4",
+
+    "moment-timezone": "^0.5.43",
+
+    "momentjs": "^2.0.0",
+
     "mongodb": "^5.7.0",
+
     "mongoose": "^7.3.4",
+
     "nodemailer": "^6.9.3"
+
   }
+
 }
+
