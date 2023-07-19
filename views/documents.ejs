@@ -2,19 +2,18 @@
 <html>
 <head>
   <title>Documents</title>
-  <style>
-    td{
-        border: 1px solid black;
-    }
-  </style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/form.css">
+<link rel="stylesheet" href="css/style.css">
 <script src="
 https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
 </head>
 
 <body>
   <h1>All Bookings</h1>
+<div class="bookings" style="overflow-x:auto;">
     <table>
-        <tr>
+        <tr class="t-head">
             <td>
                 <strong>User</strong>
             </td>
@@ -50,12 +49,44 @@ https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
            
             </td>
             <td>
-                <%= doc.status %>
+          
+            <select onchange="handleStatusChange('<%= doc._id %>','<%= doc.user %>','<%= doc.startTime %>','<%= doc.endTime %>' , this.value)">
+                <option value="Pending" <% if (doc.status==='Pending' ) { %>selected<% } %>>Pending</option>
+                <option value="Approved" <% if (doc.status==='Approved' ) { %>selected<% } %>>Approved</option>
+                <option value="Declined" <% if (doc.status==='Declined' ) { %>selected<% } %>>Declined</option>
+            </select>
             </td>
         </tr>
 
     <% }); %>
-  </ul>
+  </table>
+  </div>
+  <script>
+    function handleStatusChange(id, user, cmailStartTime, cmailEndTime, status) {
+        if (status === 'Approved') {
+            sendApprovalEmail(id, user, cmailStartTime, cmailEndTime, status);
+        }
+    }
+
+    function sendApprovalEmail(id, user, cmailStartTime, cmailEndTime, status) {
+        fetch('/send-email', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({id:id, to: user, start: cmailStartTime, end: cmailEndTime, status: status }),
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                // Optionally, you can display a success message to the user.
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                // Handle errors here.
+            });
+    }
+</script>
 </body>
 
 </html>

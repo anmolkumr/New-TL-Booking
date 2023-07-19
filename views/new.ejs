@@ -3,16 +3,24 @@
 
 <head>
     <title>Convert Datetimes to UTC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="css/form.css">
+    
 
     <script>
-       
+        
+    
         function convertToUTC() {
             // Get the form values
             const user = document.getElementById('userInput').value;
+            const email = document.getElementById('emailInput').value;
+            const contact = document.getElementById('contactInput').value;
             const startTime = document.getElementById('startTimeInput').value;
             const endTime = document.getElementById('endTimeInput').value;
+            const info = document.getElementById('infoInput').value;
             const status = document.getElementById('statusInput').value;
 
             // Convert the start and end times to UTC using Moment.js
@@ -27,7 +35,7 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ user, utcStartTime, utcEndTime, status })
+                body: JSON.stringify({ user, email, contact, utcStartTime, utcEndTime,info, status })
             })
                 .then(response => response.text()) // Extract the response text
                 .then(data => {
@@ -42,22 +50,116 @@
                     alert('Error:', error);
                 });
         }
+            function snackbar() {
+                    document.getElementById("snackbar").style.bottom = "38px";
+                }
+
+                function nosnackbar() {
+                    document.getElementById("snackbar").style.bottom = "-300px";
+                }
+
+                function validate() {
+                    var mail = document.forms['mform']['Email'].value;
+                    var name = document.forms['mform']['Name'].value;
+                    var contact = document.forms['mform']['Roll'].value;
+                    var sweet = document.forms['mform']['Candidature'].value;
+
+
+                    if (mail == "" || name == "" || contact == "" || sweet == "") {
+                        alert("Please fill all Details");
+                    }
+                    else {
+                        snackbar()
+                    }
+                }
+
     </script>
+
 </head>
 
 <body>
-    <h1>Convert Datetimes to UTC</h1>
-    <form>
-        <label for="userInput">User:</label>
-        <input type="text" id="userInput" value="test1">
-        <label for="startTimeInput">Start Time:</label>
-        <input type="datetime-local" id="startTimeInput">
-        <label for="endTimeInput">End Time:</label>
-        <input type="datetime-local" id="endTimeInput">
-        <label for="statusInput">Status:</label>
-        <input type="text" id="statusInput" value="Approved">
-        <button type="button" onclick="convertToUTC()">Convert and Submit</button>
-    </form>
+    <h1 class="center">TL Booking</h1>
+    <div class="form-container">
+
+        <form>
+            <label for="userInput">Name</label><br>
+            <input type="text" id="userInput"><br><br>
+            <label for="emailInput">Email </label><br>
+            <input type="text" id="emailInput"><br><br>
+            <label for="contactInput">Phone</label><br>
+            <input type="tel" id="contactInput"><br><br>
+            
+            <label for="startTimeInput">When Do you Need the Machine?</label><br>
+            <input type="datetime-local" id="startTimeInput"><br><br>
+            <label for="endTimeInput">End Time</label><br>
+            <input type="datetime-local" id="endTimeInput"><br><br>
+            <label for="infoInput">Description of Work</label><br>
+            <input type="text" id="infoInput"><br>
+            <!-- <label for="statusInput">Status:</label> -->
+            <input type="text" id="statusInput" value="Pending" style="display: none;">
+            <button type="button" onclick="convertToUTC()">Submit</button>
+        </form>
+        
+    </div>
+
+
+<!-- <div id="main"> -->
+    <!-- <div class="intern-form profile-box color-coral"><br>
+                    <div class="center"><i class="fa-regular fa-clock center" style="color:brown"></i></div>
+                    <div class="heading center"  style="color:brown">Nomination Portal Closed!</div>
+                    <br><br>
+                    
+                </div> -->
+
+    <!-- <div class="intern-form card-ui">
+        <h2 class="center font">Student Council Nomination</h2>
+
+        <form id="my-form" name="mform" method="POST"
+            action="https://script.google.com/macros/s/AKfycbwcXtc9EAgHiNyKM0B2hxn2URiK60-6120dUC5QVSLoBbKwz-tBlHobaVSPLggWKzeR5g/exec">
+            <input class="input" name="Email" type="email" required>
+            <label class="placeholder open-sans bold">Email</label>
+            <br><br>
+            
+            <br>
+            <button type="submit" onclick="validate()">Submit</button>
+            <div id="snackbar" class="snackbar open-sans"><i
+                    class="fa-solid fa-circle-nodes spin"></i>&nbsp;&nbsp;&nbsp;Processing Form...</div>
+        </form>
+
+
+    </div>
+
+</div> -->
+
+
+
+</div>
+<script>
+    const input = document.getElementById('fname');
+
+        input.addEventListener('input', () => {
+            input.setAttribute('value', input.value);
+        });
+    window.addEventListener("load", function () {
+        const form = document.getElementById('my-form');
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const data = new FormData(form);
+            const action = e.target.action;
+            fetch(action, {
+                method: 'POST',
+                body: data,
+            })
+                .then(() => {
+                    alert("Data Submitted");
+                    nosnackbar();
+                    document.getElementById('my-form').reset();
+
+                })
+        });
+    });
+
+</script>
 </body>
 
 </html>

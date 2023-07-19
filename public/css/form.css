@@ -1,0 +1,138 @@
+.input-container {
+    position: relative;
+    background-color: aquamarine;
+}
+
+input {
+    height: 48px;
+    width: 280px;
+    border: 1px solid #c0c0c0;
+    border-radius: 4px;
+    box-sizing: border-box;
+    padding: 16px;
+}
+
+.label {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 16px;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+}
+
+input,
+.label .text {
+    font-family: 'Segoe UI';
+    font-size: 16px;
+}
+
+.label .text {
+    transition: all 0.15s ease-out;
+    color: grey;
+}
+
+input:focus {
+    outline: none;
+    border: 2px solid blue;
+}
+
+input:focus+.label .text,
+:not(input[value=""])+.label .text {
+    font-size: 12px;
+    transform: translate(0, -150%);
+    background-color: white;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+input:focus+.label .text {
+    color: blue;
+}
+
+body {
+    font-family: sans-serif;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    width: 100%;
+    border: 1px solid #ddd;
+}
+
+th,
+td {
+    text-align: left;
+    padding: 8px;
+}
+
+
+.t-head {
+    background-color: #5944ff;
+    color: #ddd;}
+
+tr:nth-child(even) {
+    background-color: #ddd9ff;
+}
+
+body {
+    background-color: #f5f5f5;
+}
+
+#grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-gap: 20px;
+    width: 80%;
+}
+
+#grid>div {
+    border-radius: 20px;
+    padding: 0.5em;
+    height: 150px;
+    color: #5944ff;
+    background: #ddd9ff;
+    text-align: center;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    transition: 0.3s;
+}
+
+#grid>div:hover {
+    border-radius: 20px;
+    padding: 0.5em;
+    height: 150px;
+    color: #ddd9ff;
+    background: #5944ff;
+    text-align: center;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+
+#grid>div i {
+    font-size: 40px;
+}
+
+.container {
+    margin-top: 10%;
+    display: grid;
+    place-items: center;
+}
+
+.bookings {
+
+}
+
+.form-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

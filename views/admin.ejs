@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        <%= title %>
+    </title>
+    <link rel="stylesheet" href="/css/form.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet">
+    <style>
+   
+    </style>
+</head>
+
+<body>
+    <h2 class="heading center">Welcome to TL Admin Panel</h2>
+    <div class="container">
+        <div id="grid">
+            <div onclick="location.href=''"><i class="lni lni-dashboard"></i>
+                <div>Dashboard</div>
+            </div>
+            <div onclick="location.href='/documents'"><i class="lni lni-check-box"></i>
+                <div>Bookings</div>
+            </div>
+            <div onclick="location.href='/manage'"><i class="lni lni-users"></i>
+                <div>User Management</div>
+            </div>
+            <div onclick="location.href='/inventory'"><i class="lni lni-hammer"></i><div>Inventory</div></div>
+            <div>
+                <i class="lni lni-comments-reply"></i>
+                <div>Complaints</div>
+            </div>
+            <div onclick="location.href='/edit'">
+                <i class="lni lni-pencil-alt"></i>
+                <div>
+                    Edit Profile
+                </div>
+            </div>
+            <div><i class="lni lni-exit"></i>
+            <div onclick="location.href='/logout'">
+                Logout
+            </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
