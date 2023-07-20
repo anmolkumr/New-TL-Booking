@@ -107,7 +107,7 @@ app.get('/', function (req, res) {
 
 app.post('/send-email', function (req, res) {
     console.log(req.body);
-    const { id, to, start, end, status } = req.body;
+    const { id, to, cname, start, end, status } = req.body;
     const sub = `Confirmed Booking for ${to}`;
     const mailStartTime = moment(start).format('YYYY-MM-DD hh:mm A');
     const mailEndTime = moment(end).format('YYYY-MM-DD hh:mm A');
@@ -120,7 +120,7 @@ app.post('/send-email', function (req, res) {
 
     // async..await is not allowed in global scope, must use a wrapper
     async function main() {
-        const html = await ejs.renderFile('views/email.ejs', { to, mailStartTime, mailEndTime, });
+        const html = await ejs.renderFile('views/email.ejs', { cname, mailStartTime, mailEndTime, });
         const accessToken = await OAuth2Client.getAccessToken()
         var transporter = nodemailer.createTransport({
             service: 'gmail',

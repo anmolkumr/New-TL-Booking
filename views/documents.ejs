@@ -38,7 +38,7 @@ https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
         <tr>
             <% ans.forEach(function(doc) { %>
             <td>
-                <%= doc.user %>
+                <%= doc.email %>
             </td>
             <td>
                 <%=doc.startTime %>
@@ -50,7 +50,7 @@ https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
             </td>
             <td>
           
-            <select onchange="handleStatusChange('<%= doc._id %>','<%= doc.user %>','<%= doc.startTime %>','<%= doc.endTime %>' , this.value)">
+            <select onchange="handleStatusChange('<%= doc._id %>','<%= doc.email %>', '<%= doc.user %>','<%= doc.startTime %>','<%= doc.endTime %>' , this.value)">
                 <option value="Pending" <% if (doc.status==='Pending' ) { %>selected<% } %>>Pending</option>
                 <option value="Approved" <% if (doc.status==='Approved' ) { %>selected<% } %>>Approved</option>
                 <option value="Declined" <% if (doc.status==='Declined' ) { %>selected<% } %>>Declined</option>
@@ -62,19 +62,19 @@ https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
   </table>
   </div>
   <script>
-    function handleStatusChange(id, user, cmailStartTime, cmailEndTime, status) {
+    function handleStatusChange(id, user, cname, cmailStartTime, cmailEndTime, status) {
         if (status === 'Approved') {
-            sendApprovalEmail(id, user, cmailStartTime, cmailEndTime, status);
+            sendApprovalEmail(id, user, cname, cmailStartTime, cmailEndTime, status);
         }
     }
 
-    function sendApprovalEmail(id, user, cmailStartTime, cmailEndTime, status) {
+    function sendApprovalEmail(id, user, cname, cmailStartTime, cmailEndTime, status) {
         fetch('/send-email', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({id:id, to: user, start: cmailStartTime, end: cmailEndTime, status: status }),
+            body: JSON.stringify({id:id, to: user, cname: cname, start: cmailStartTime, end: cmailEndTime, status: status }),
         })
             .then(response => response.json())
             .then(data => {
