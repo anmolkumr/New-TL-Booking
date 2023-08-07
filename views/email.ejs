@@ -109,7 +109,8 @@
 <body style="background-color: #f4f4f4; margin: 0 !important; padding: 0 !important;">
     <!-- HIDDEN PREHEADER TEXT -->
     <div
-        style="display: none; font-size: 1px; color: #fefefe; line-height: 1px; font-family: 'Lato', Helvetica, Arial, sans-serif; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;"></div>
+        style="display: none; font-size: 1px; color: #fefefe; line-height: 1px; font-family: 'Lato', Helvetica, Arial, sans-serif; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;">
+    </div>
     <table border="0" cellpadding="0" cellspacing="0" width="100%">
         <!-- LOGO -->
         <tr>
@@ -127,9 +128,10 @@
                     <tr>
                         <td bgcolor="#ffffff" align="center" valign="top"
                             style="padding: 40px 20px 20px 20px; border-radius: 27px 27px 0px 0px; color: #111111; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 48px; font-weight: 400; letter-spacing: 4px; line-height: 48px;">
-                            <img src="https://tinypic.host/images/2023/07/16/flat_solid.gif" width="300" height="300" style="display: block; border: 0px;" />
-                            <h1 style="font-size: 48px; font-weight: 400; margin: 2;">Confirmed!!</h1> 
-                           
+                            <img src="https://tinypic.host/images/2023/07/16/flat_solid.gif" width="300" height="300"
+                                style="display: block; border: 0px;" />
+                            <h1 style="font-size: 48px; font-weight: 400; margin: 2;">Confirmed!!</h1>
+
                         </td>
                     </tr>
                 </table>
@@ -142,32 +144,38 @@
                         <td bgcolor="#ffffff" align="left"
                             style="padding: 20px 30px 40px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
                             <p style="margin: 0;">Dear <%= cname %>, <br>
-                                We hereby Confirm your Booking for <b> Mehta Laser Cutting Machine</b>. <br><br> The Timings are as Following: <br><br>
-                              <table border="1" width="100%">
-                                <tr align="center" >
+                                    We hereby Confirm your Booking for <b> Mehta Laser Cutting Machine</b>. <br><br> The
+                                    Timings are as Following: <br><br>
+                                    <table border="1" width="100%">
+                                        <tr align="center">
 
-                                    <td><b>From</b></td>
-                                    <td><b>To</b></td>
-                                </tr>
-                               
-                                <tr align="center">
-                                    <td><%= mailStartTime %></td>
-                                    <td><%= mailEndTime %></td>
-                                
-                                </tr>
+                                            <td><b>From</b></td>
+                                            <td><b>To</b></td>
+                                        </tr>
 
-                              </table>
+                                        <tr align="center">
+                                            <td>
+                                                <%= mailStartTime %>
+                                            </td>
+                                            <td>
+                                                <%= mailEndTime %>
+                                            </td>
+
+                                        </tr>
+
+                                    </table>
                         </td>
                     </tr>
                     <tr>
                         <td bgcolor="#ffffff" align="left">
-                            
+
                         </td>
                     </tr> <!-- COPY -->
                     <tr>
                         <td bgcolor="#ffffff" align="left"
                             style="padding: 0px 30px 20px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 18px; font-weight: 400; line-height: 25px;">
-                            <p style="margin: 0;">If you have any other concern, just reply to this email — We're always happy
+                            <p style="margin: 0;">If you have any other concern, just reply to this email — We're always
+                                happy
                                 to help out.</p>
                         </td>
                     </tr>
@@ -181,7 +189,7 @@
             </td>
         </tr>
         <tr>
-            
+
         </tr>
         <tr>
             <td bgcolor="#f4f4f4" align="center" style="padding: 0px 10px 0px 10px;">

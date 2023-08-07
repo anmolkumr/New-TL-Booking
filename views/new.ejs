@@ -8,11 +8,11 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link rel="stylesheet" href="css/form.css">
-    
+
 
     <script>
-        
-    
+
+
         function convertToUTC() {
             // Get the form values
             const user = document.getElementById('userInput').value;
@@ -35,13 +35,13 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ user, email, contact, utcStartTime, utcEndTime,info, status })
+                body: JSON.stringify({ user, email, contact, utcStartTime, utcEndTime, info, status })
             })
                 .then(response => response.text()) // Extract the response text
                 .then(data => {
-                     Swal.fire({
+                    Swal.fire({
                         title: data,
-                       
+
                         confirmButtonText: 'Okay'
                     })
                     //Swal.fire('Response from backend: ' + data);  Display the response in an alert dialog
@@ -50,28 +50,28 @@
                     alert('Error:', error);
                 });
         }
-            function snackbar() {
-                    document.getElementById("snackbar").style.bottom = "38px";
-                }
+        function snackbar() {
+            document.getElementById("snackbar").style.bottom = "38px";
+        }
 
-                function nosnackbar() {
-                    document.getElementById("snackbar").style.bottom = "-300px";
-                }
+        function nosnackbar() {
+            document.getElementById("snackbar").style.bottom = "-300px";
+        }
 
-                function validate() {
-                    var mail = document.forms['mform']['Email'].value;
-                    var name = document.forms['mform']['Name'].value;
-                    var contact = document.forms['mform']['Roll'].value;
-                    var sweet = document.forms['mform']['Candidature'].value;
+        function validate() {
+            var mail = document.forms['mform']['Email'].value;
+            var name = document.forms['mform']['Name'].value;
+            var contact = document.forms['mform']['Roll'].value;
+            var sweet = document.forms['mform']['Candidature'].value;
 
 
-                    if (mail == "" || name == "" || contact == "" || sweet == "") {
-                        alert("Please fill all Details");
-                    }
-                    else {
-                        snackbar()
-                    }
-                }
+            if (mail == "" || name == "" || contact == "" || sweet == "") {
+                alert("Please fill all Details");
+            }
+            else {
+                snackbar()
+            }
+        }
 
     </script>
 
@@ -80,30 +80,38 @@
 <body>
     <h1 class="center">TL Booking</h1>
     <div class="form-container">
-
-        <form>
-            <label for="userInput">Name</label><br>
-            <input type="text" id="userInput"><br><br>
-            <label for="emailInput">Email </label><br>
-            <input type="text" id="emailInput"><br><br>
-            <label for="contactInput">Phone</label><br>
-            <input type="tel" id="contactInput"><br><br>
-            
-            <label for="startTimeInput">When Do you Need the Machine?</label><br>
-            <input type="datetime-local" id="startTimeInput"><br><br>
-            <label for="endTimeInput">End Time</label><br>
-            <input type="datetime-local" id="endTimeInput"><br><br>
-            <label for="infoInput">Description of Work</label><br>
-            <input type="text" id="infoInput"><br>
-            <!-- <label for="statusInput">Status:</label> -->
-            <input type="text" id="statusInput" value="Pending" style="display: none;">
-            <button type="button" onclick="convertToUTC()">Submit</button>
-        </form>
-        
+<% if (!loggedIn) { %>
+    <div class="sign-in text-center">
+        <p class="sign-in-text">Please Sign In to continue</p>
+        <br>
+        <a class="btn btn-outline-light sign-in-btn" href="/booking_withoutLogin" role="button">Sign In with Google Account</a>
+    </div>
+    <% } else { %>
+    <form>
+        <label for="userInput">Name</label><br>
+        <input type="text" id="userInput"><br><br>
+        <label for="emailInput">Email </label><br>
+        <input type="text" id="emailInput"><br><br>
+        <label for="contactInput">Phone</label><br>
+        <input type="tel" id="contactInput"><br><br>
+    
+        <label for="startTimeInput">When Do you Need the Machine?</label><br>
+        <input type="datetime-local" id="startTimeInput"><br><br>
+        <label for="endTimeInput">End Time</label><br>
+        <input type="datetime-local" id="endTimeInput"><br><br>
+        <label for="infoInput">Description of Work</label><br>
+        <input type="text" id="infoInput"><br>
+        <!-- <label for="statusInput">Status:</label> -->
+        <input type="text" id="statusInput" value="Pending" style="display: none;">
+        <button type="button" onclick="convertToUTC()">Submit</button>
+    </form>
+    
     </div>
 
+        <% } %>
+        
 
-<!-- <div id="main"> -->
+    <!-- <div id="main"> -->
     <!-- <div class="intern-form profile-box color-coral"><br>
                     <div class="center"><i class="fa-regular fa-clock center" style="color:brown"></i></div>
                     <div class="heading center"  style="color:brown">Nomination Portal Closed!</div>
@@ -133,33 +141,33 @@
 
 
 
-</div>
-<script>
-    const input = document.getElementById('fname');
+    </div>
+    <script>
+        const input = document.getElementById('fname');
 
         input.addEventListener('input', () => {
             input.setAttribute('value', input.value);
         });
-    window.addEventListener("load", function () {
-        const form = document.getElementById('my-form');
-        form.addEventListener("submit", function (e) {
-            e.preventDefault();
-            const data = new FormData(form);
-            const action = e.target.action;
-            fetch(action, {
-                method: 'POST',
-                body: data,
-            })
-                .then(() => {
-                    alert("Data Submitted");
-                    nosnackbar();
-                    document.getElementById('my-form').reset();
-
+        window.addEventListener("load", function () {
+            const form = document.getElementById('my-form');
+            form.addEventListener("submit", function (e) {
+                e.preventDefault();
+                const data = new FormData(form);
+                const action = e.target.action;
+                fetch(action, {
+                    method: 'POST',
+                    body: data,
                 })
-        });
-    });
+                    .then(() => {
+                        alert("Data Submitted");
+                        nosnackbar();
+                        document.getElementById('my-form').reset();
 
-</script>
+                    })
+            });
+        });
+
+    </script>
 </body>
 
 </html>

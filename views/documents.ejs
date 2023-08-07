@@ -1,92 +1,96 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-  <title>Documents</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="css/form.css">
-<link rel="stylesheet" href="css/style.css">
-<script src="
+    <title>Documents</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/form.css">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="
 https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
 </head>
 
 <body>
-  <h1>All Bookings</h1>
-<div class="bookings" style="overflow-x:auto;">
-    <table>
-        <tr class="t-head">
-            <td>
-                <strong>User</strong>
-            </td>
-            <td>
-                <strong>
-                    Start Time
-    
-                </strong>
-            </td>
-            <td>
-                <strong>
-                    End Time
-                </strong>
-            </td>
-            <td>
-                <strong>
-                    Status
-                </strong>
-            </td>
-        </tr>
-    
-        <tr>
-            <% ans.forEach(function(doc) { %>
-            <td>
-                <%= doc.email %>
-            </td>
-            <td>
-                <%=doc.startTime %>
-            </td>
-            <td>
-          
-            <%=doc.endTime %>
-           
-            </td>
-            <td>
-          
-            <select onchange="handleStatusChange('<%= doc._id %>','<%= doc.email %>', '<%= doc.user %>','<%= doc.startTime %>','<%= doc.endTime %>' , this.value)">
-                <option value="Pending" <% if (doc.status==='Pending' ) { %>selected<% } %>>Pending</option>
-                <option value="Approved" <% if (doc.status==='Approved' ) { %>selected<% } %>>Approved</option>
-                <option value="Declined" <% if (doc.status==='Declined' ) { %>selected<% } %>>Declined</option>
-            </select>
-            </td>
-        </tr>
+    <h1>All Bookings</h1>
+    <div class="bookings" style="overflow-x:auto;">
+        <table>
+            <tr class="t-head">
+                <td>
+                    <strong>User</strong>
+                </td>
+                <td>
+                    <strong>
+                        Start Time
 
-    <% }); %>
-  </table>
-  </div>
-  <script>
-    function handleStatusChange(id, user, cname, cmailStartTime, cmailEndTime, status) {
-        if (status === 'Approved') {
-            sendApprovalEmail(id, user, cname, cmailStartTime, cmailEndTime, status);
+                    </strong>
+                </td>
+                <td>
+                    <strong>
+                        End Time
+                    </strong>
+                </td>
+                <td>
+                    <strong>
+                        Status
+                    </strong>
+                </td>
+            </tr>
+
+            <tr>
+                <% ans.forEach(function(doc) { %>
+                    <td>
+                        <%= doc.email %>
+                    </td>
+                    <td>
+                        <%=doc.startTime %>
+                    </td>
+                    <td>
+
+                        <%=doc.endTime %>
+
+                    </td>
+                    <td>
+
+                        <select
+                            onchange="handleStatusChange('<%= doc._id %>','<%= doc.email %>', '<%= doc.user %>','<%= doc.startTime %>','<%= doc.endTime %>' , this.value)">
+                            <option value="Pending" <% if (doc.status==='Pending' ) { %>selected<% } %>>Pending</option>
+                            <option value="Approved" <% if (doc.status==='Approved' ) { %>selected<% } %>>Approved
+                            </option>
+                            <option value="Declined" <% if (doc.status==='Declined' ) { %>selected<% } %>>Declined
+                            </option>
+                        </select>
+                    </td>
+            </tr>
+
+            <% }); %>
+        </table>
+    </div>
+    <script>
+        function handleStatusChange(id, user, cname, cmailStartTime, cmailEndTime, status) {
+            if (status === 'Approved') {
+                sendApprovalEmail(id, user, cname, cmailStartTime, cmailEndTime, status);
+            }
         }
-    }
 
-    function sendApprovalEmail(id, user, cname, cmailStartTime, cmailEndTime, status) {
-        fetch('/send-email', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({id:id, to: user, cname: cname, start: cmailStartTime, end: cmailEndTime, status: status }),
-        })
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                // Optionally, you can display a success message to the user.
+        function sendApprovalEmail(id, user, cname, cmailStartTime, cmailEndTime, status) {
+            fetch('/send-email', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: id, to: user, cname: cname, start: cmailStartTime, end: cmailEndTime, status: status }),
             })
-            .catch(error => {
-                console.error('Error:', error);
-                // Handle errors here.
-            });
-    }
-</script>
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    // Optionally, you can display a success message to the user.
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Handle errors here.
+                });
+        }
+    </script>
 </body>
 
 </html>

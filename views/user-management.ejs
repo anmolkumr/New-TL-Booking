@@ -18,26 +18,26 @@
     <div class="container">
 
         <button onclick="openModelUser()"><i class="lni lni-circle-plus"></i> <span>Add New</span></button>
-        
+
         <div class="Model-box" id="Model-box" style="display: none;">
             <form action="/blacklisted" method="post">
                 <label for="email">Email of User</label><br>
                 <input type="email" name="black-email" id="b-email">
-                
+
                 <br><br>
                 <label for="email">Reason for Blacklisting</label><br>
                 <input type="text" name="black-reason" id="b-reason"><br><br>
                 <button type="submit">Submit</button>
             </form>
         </div>
-        
-    </div>
-        <script>
-    function openModelUser(){
-        document.getElementById('Model-box').style.display= 'block';
 
-    }
-</script>
+    </div>
+    <script>
+        function openModelUser() {
+            document.getElementById('Model-box').style.display = 'block';
+
+        }
+    </script>
 </body>
 
 </html>
