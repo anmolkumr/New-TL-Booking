@@ -2,74 +2,61 @@
 <html>
 
 <head>
-  <title>Mehta Laser Cutting Machine | Booking Portal, TL IITGN</title>
+  <title>Machine Booking Portal | Tinkerers' Lab IITGN</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <link rel="stylesheet" href="css/form.css">
 
 
   <script>
+    function convertToUTCandSend() {
 
-
-    function convertToUTC() {
-      // Get the form values
       const user = document.getElementById('userInput').value;
       const email = document.getElementById('emailInput').value;
       const contact = document.getElementById('contactInput').value;
+      const machine = document.getElementById('machine').value;
       const startTime = document.getElementById('startTimeInput').value;
       const endTime = document.getElementById('endTimeInput').value;
       const info = document.getElementById('infoInput').value;
       const status = document.getElementById('statusInput').value;
 
-      // Convert the start and end times to UTC using Moment.js
+      // Convert the start and end times to UTC #important
       const utcStartTime = moment(startTime).utc().format();
       const utcEndTime = moment(endTime).utc().format();
       console.log(utcStartTime);
       console.log(utcEndTime);
-
-      // Send the UTC values and user to the Node.js backend
-      fetch('/sign_up', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ user, email, contact, utcStartTime, utcEndTime, info, status })
-      })
-        .then(response => response.text()) // Extract the response text
-        .then(data => {
-          Swal.fire({
-            title: data,
-
-            confirmButtonText: 'Okay'
-          })
-          //Swal.fire('Response from backend: ' + data);  Display the response in an alert dialog
+      if (contact == "" || machine == "" || startTime == "" || endTime == "" || info == "") {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Please fill all required Fiels',
+          footer: '<a href="mailto:tl@iitgn.ac.in">Having Issues? Contact Us</a>'
         })
-        .catch(error => {
-          alert('Error:', error);
-        });
-    }
-    function snackbar() {
-      document.getElementById("snackbar").style.bottom = "38px";
-    }
-
-    function nosnackbar() {
-      document.getElementById("snackbar").style.bottom = "-300px";
-    }
-
-    function validate() {
-      var mail = document.forms['mform']['Email'].value;
-      var name = document.forms['mform']['Name'].value;
-      var contact = document.forms['mform']['Roll'].value;
-      var sweet = document.forms['mform']['Candidature'].value;
-
-
-      if (mail == "" || name == "" || contact == "" || sweet == "") {
-        alert("Please fill all Details");
       }
       else {
-        snackbar()
+        fetch('/proceed_form', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ user, email, contact, machine, utcStartTime, utcEndTime, info, status })
+        })
+          .then(response => response.text())
+          .then(data => {
+            Swal.fire({
+              title: data,
+              confirmButtonText: 'Okay'
+            }).then(function () {
+              document.querySelector('form').reset();
+            });
+
+            //Swal.fire('Response from backend: ' + data); Display it
+          })
+          .catch(error => {
+            alert('Error:', error);
+          });
       }
     }
 
@@ -78,95 +65,82 @@
 </head>
 
 <body>
-  <h1 class="center">TL Booking</h1>
-  <div class="form-container">
-    <% if (!loggedIn) { %>
-      <div class="sign-in text-center">
-        <p class="sign-in-text">Please Sign In to continue</p>
-        <br>
-        <a class="btn btn-outline-light sign-in-btn" href="/booking_withoutLogin" role="button">Sign In with Google
-          Account</a>
-      </div>
-      <% } else { %>
-        <form>
-          <label for="userInput">Name</label><br>
-          <input type="text" id="userInput"><br><br>
-          <label for="emailInput">Email </label><br>
-          <input type="text" id="emailInput"><br><br>
-          <label for="contactInput">Phone</label><br>
-          <input type="tel" id="contactInput"><br><br>
+  <h1 class="txt-center">TL Machine Booking</h1>
+  <div class="align-center">
 
-          <label for="startTimeInput">When Do you Need the Machine?</label><br>
-          <input type="datetime-local" id="startTimeInput"><br><br>
-          <label for="endTimeInput">End Time</label><br>
-          <input type="datetime-local" id="endTimeInput"><br><br>
-          <label for="infoInput">Description of Work</label><br>
-          <input type="text" id="infoInput"><br>
-          <!-- <label for="statusInput">Status:</label> -->
-          <input type="text" id="statusInput" value="Pending" style="display: none;">
-          <button type="button" onclick="convertToUTC()">Submit</button>
-        </form>
 
+    <div class="form-container">
+      <% if (!loggedIn) { %>
+        <div class="sign-in text-center">
+          <p class="sign-in-text">Please Sign In to continue.</p>
+          <br>
+          <a class="btn btn-outline-light sign-in-btn" href="/booking_withoutLogin" role="button">Sign In with Google
+            Account</a>
+        </div>
+        <% } else { %>
+          <form>
+            <label for="machine">Choose Machine</label><br>
+            <select id="machine" name="machine">
+              <option value=""></option>
+              <option value="Mehta Laser Cutting" <%=machine==='Mehta Laser Cutting' ? 'selected' : '' %>>Mehta Laser
+                Cutting</option>
+              <option value="3D Printer" <%=machine==='3D Printer' ? 'selected' : '' %>>3D Printer</option>
+              <option value="GCC Laser Cutting" <%=machine==='GCC Laser Cutting' ? 'selected' : '' %>>GCC Laser Cutting
+              </option>
+              <option value="Roland Vinyl Cutter" <%=machine==='Roland Vinyl Cutter' ? 'selected' : '' %>>Roland Vinyl
+                Cutter</option>
+
+            </select>
+            <br>
+            <br>
+            <label for="userInput">Name</label><br>
+            <input type="text" id="userInput" value="<%= name %>" disabled><br><br>
+            <label for="emailInput">Email </label><br>
+            <input type="text" id="emailInput" value="<%= email %>" disabled><br><br>
+            <label for="contactInput">Phone</label><br>
+            <input type="tel" id="contactInput"><br><br>
+
+            <label for="startTimeInput">When Do you Need the Machine?</label><br>
+            <input type="datetime-local" id="startTimeInput"><br><br>
+            <label for="endTimeInput">End Time</label><br>
+            <input type="datetime-local" id="endTimeInput" onblur="validateEndTime()"><br><br>
+            <p class="warning" id="endTimeWarning"></p>
+            <label for="infoInput">Description of Work</label><br>
+            <input type="text" id="infoInput"><br>
+            <input type="text" id="statusInput" value="Pending" style="display: none;"><br><br>
+            <button class="cta txt-center " type="button" onclick="convertToUTCandSend()">Submit</button>
+
+          </form>
+
+    </div>
   </div>
 
   <% } %>
 
-
-    <!-- <div id="main"> -->
-    <!-- <div class="intern-form profile-box color-coral"><br>
-                    <div class="center"><i class="fa-regular fa-clock center" style="color:brown"></i></div>
-                    <div class="heading center"  style="color:brown">Nomination Portal Closed!</div>
-                    <br><br>
-                    
-                </div> -->
-
-    <!-- <div class="intern-form card-ui">
-        <h2 class="center font">Student Council Nomination</h2>
-
-        <form id="my-form" name="mform" method="POST"
-            action="https://script.google.com/macros/s/AKfycbwcXtc9EAgHiNyKM0B2hxn2URiK60-6120dUC5QVSLoBbKwz-tBlHobaVSPLggWKzeR5g/exec">
-            <input class="input" name="Email" type="email" required>
-            <label class="placeholder open-sans bold">Email</label>
-            <br><br>
-            
-            <br>
-            <button type="submit" onclick="validate()">Submit</button>
-            <div id="snackbar" class="snackbar open-sans"><i
-                    class="fa-solid fa-circle-nodes spin"></i>&nbsp;&nbsp;&nbsp;Processing Form...</div>
-        </form>
-
-
-    </div>
-
-</div> -->
-
-
-
     </div>
     <script>
-      const input = document.getElementById('fname');
+      function validateEndTime() {
+        const startTimeInput = document.getElementById("startTimeInput");
+        const endTimeInput = document.getElementById("endTimeInput");
+        const endTimeWarning = document.getElementById("endTimeWarning");
+        const startTime = new Date(startTimeInput.value);
+        const endTime = new Date(endTimeInput.value);
 
-      input.addEventListener('input', () => {
-        input.setAttribute('value', input.value);
-      });
-      window.addEventListener("load", function () {
-        const form = document.getElementById('my-form');
-        form.addEventListener("submit", function (e) {
-          e.preventDefault();
-          const data = new FormData(form);
-          const action = e.target.action;
-          fetch(action, {
-            method: 'POST',
-            body: data,
-          })
-            .then(() => {
-              alert("Data Submitted");
-              nosnackbar();
-              document.getElementById('my-form').reset();
+        endTimeWarning.textContent = "";
 
-            })
-        });
-      });
+        if (!startTimeInput.value) {
+          alert('Fill the Start Time First');
+          endTimeInput.value = "";
+        }
+        if (endTime <= startTime) {
+          endTimeWarning.textContent = "End time must be greater than start time.";
+          endTimeInput.value = "";
+        }
+        if (endTime - startTime > 2 * 60 * 60 * 1000) {
+          endTimeWarning.textContent = "The duration cannot be more than 2 hours.";
+          endTimeInput.value = "";
+        }
+      }
 
     </script>
 </body>

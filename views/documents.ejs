@@ -16,12 +16,18 @@ https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
         <table>
             <tr class="t-head">
                 <td>
-                    <strong>User</strong>
+                    <strong>Email ID</strong>
                 </td>
+                <td>
+                    <strong>Name</strong>
+                </td>
+                <td>
+                    <strong>Machine</strong>
+                </td>
+
                 <td>
                     <strong>
                         Start Time
-
                     </strong>
                 </td>
                 <td>
@@ -42,6 +48,12 @@ https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
                         <%= doc.email %>
                     </td>
                     <td>
+                        <%=doc.user %>
+                    </td>
+                    <td>
+                        <%=doc.machine %>
+                    </td>
+                    <td>
                         <%=doc.startTime %>
                     </td>
                     <td>
@@ -52,7 +64,7 @@ https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
                     <td>
 
                         <select
-                            onchange="handleStatusChange('<%= doc._id %>','<%= doc.email %>', '<%= doc.user %>','<%= doc.startTime %>','<%= doc.endTime %>' , this.value)">
+                            onchange="handleStatusChange('<%= doc._id %>','<%= doc.email %>', '<%= doc.user %>','<%= doc.machine %>','<%= doc.startTime %>','<%= doc.endTime %>' , this.value)">
                             <option value="Pending" <% if (doc.status==='Pending' ) { %>selected<% } %>>Pending</option>
                             <option value="Approved" <% if (doc.status==='Approved' ) { %>selected<% } %>>Approved
                             </option>
@@ -66,28 +78,28 @@ https://cdn.jsdelivr.net/npm/moment@2.29.4/moment.min.js"></script>
         </table>
     </div>
     <script>
-        function handleStatusChange(id, user, cname, cmailStartTime, cmailEndTime, status) {
+        function handleStatusChange(id, user, cname, machine, cmailStartTime, cmailEndTime, status) {
             if (status === 'Approved') {
-                sendApprovalEmail(id, user, cname, cmailStartTime, cmailEndTime, status);
+                sendApprovalEmail(id, user, cname, machine, cmailStartTime, cmailEndTime, status);
             }
         }
 
-        function sendApprovalEmail(id, user, cname, cmailStartTime, cmailEndTime, status) {
+        function sendApprovalEmail(id, user, cname, machine, cmailStartTime, cmailEndTime, status) {
             fetch('/send-email', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ id: id, to: user, cname: cname, start: cmailStartTime, end: cmailEndTime, status: status }),
+                body: JSON.stringify({ id: id, to: user, cname: cname, machine: machine, start: cmailStartTime, end: cmailEndTime, status: status }),
             })
                 .then(response => response.json())
                 .then(data => {
                     console.log(data);
-                    // Optionally, you can display a success message to the user.
+                   
                 })
                 .catch(error => {
                     console.error('Error:', error);
-                    // Handle errors here.
+                    
                 });
         }
     </script>

@@ -9,8 +9,7 @@ const { google } = require("googleapis");
 const cookieParser = require('cookie-parser');
 
 
-const clientId =
-    process.env.CLIENT_ID;
+const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const redirectURI = process.env.REDIRECT_URI;
 const refreshToken = process.env.REFRESH_TOKEN
@@ -28,6 +27,7 @@ const mongoose = require("mongoose");
 const Booking = require("./models/model.js");
 var ObjectId = require("mongodb").ObjectId;
 
+//Production DB
 mongoose.connect(
     process.env.MONGODB_URL,
     {
@@ -40,14 +40,15 @@ mongoose.connect(
 // useNewUrlParser: true,
 //     useUnifiedTopology: true,
 // });
+
 var db = mongoose.connection;
-const LaserCutting = require("./models/model");
+// const LaserCutting = require("./models/model");
 
 db.on("error", console.log.bind(console, "connection error"));
 db.once("open", function (callback) {
     console.log("connection succeeded");
 });
-
+//App Declaration
 var app = express();
 app.set("view engine", "ejs");
 
@@ -59,10 +60,14 @@ app.use(
     })
 );
 app.use(cookieParser());
-app.post("/sign_up", function (req, res) {
+app.use(express.urlencoded({ extended: true }));
+
+//Routes
+app.post("/proceed_form", function (req, res) {
     var name = req.body.user;
     var email = req.body.email;
     var mobile = req.body.contact;
+    var machine = req.body.machine;
     var start = new Date(req.body.utcStartTime);
     var end = new Date(req.body.utcEndTime);
     var desc = req.body.info;
@@ -72,8 +77,8 @@ app.post("/sign_up", function (req, res) {
         status: "Approved",
         $or: [
             { startTime: { $lt: end }, endTime: { $gt: start } }, // Existing interval overlaps with new interval
-            { startTime: { $gte: start, $lt: end } }, // New interval starts within existing interval
-            { endTime: { $gt: start, $lte: end } }, // New interval ends within existing interval
+            { startTime: { $gte: start, $lt: end } }, // starts within existing interval
+            { endTime: { $gt: start, $lte: end } }, // ends within existing interval
         ],
     };
 
@@ -87,11 +92,12 @@ app.post("/sign_up", function (req, res) {
             console.log("Conflicting interval found");
             res.send("Conflicting interval found. Please check Calender");
         } else {
-            // No conflicts, insert the document into the collection
+            // No conflicts, Go for it!!
             var data = {
                 user: name,
                 email: email,
                 phone: mobile,
+                machine: machine,
                 startTime: start,
                 endTime: end,
                 description: desc,
@@ -106,31 +112,36 @@ app.post("/sign_up", function (req, res) {
         }
     });
 });
-app.get('/logout', (req, res)=>{
+
+app.get('/logout', (req, res) => {
     res.clearCookie('session-token');
     res.redirect('/')
 
 })
-app.get('/booking_withoutLogin', (req, res)=>{
+app.get('/booking_withoutLogin', (req, res) => {
+
     res.render('booking_withoutLogin')
+
 })
 
 app.get("/", checkAuthenticated, function (req, res) {
-
+    const formData = {
+        machine: req.query.machine || ''
+    };
     if (req.user) {
-        // console.log("Logged in");
-        // console.log(req.user.emails[0].value);
-        res.render("form", { loggedIn: true, email: req.user.email });
+
+        res.render("form", { loggedIn: true, email: req.user.email, name: req.user.name, machine: formData.machine });
     } else {
-        // console.log("Not logged in");
+
         res.render("form", { loggedIn: false });
     }
 
 }).listen(3000);
 
+// Mailing Part
 app.post("/send-email", function (req, res) {
     console.log(req.body);
-    const { id, to, cname, start, end, status } = req.body;
+    const { id, to, cname, machine, start, end, status } = req.body;
     const sub = `Confirmed Booking for ${to}`;
     const mailStartTime = moment(start).format("YYYY-MM-DD hh:mm A");
     const mailEndTime = moment(end).format("YYYY-MM-DD hh:mm A");
@@ -142,6 +153,7 @@ app.post("/send-email", function (req, res) {
     async function main() {
         const html = await ejs.renderFile("views/email.ejs", {
             cname,
+            machine,
             mailStartTime,
             mailEndTime,
         });
@@ -159,7 +171,7 @@ app.post("/send-email", function (req, res) {
         });
 
         const info = await transporter.sendMail({
-            from: '"Laser Cutting Confirmation" <anmol4979199@gmail.com>',
+            from: '"Tinkerers Lab Confirmation" <anmol4979199@gmail.com>',
             to: to,
             subject: sub,
             html: html,
@@ -194,6 +206,7 @@ app.get("/new", checkAuthenticated, function (req, res) {
         res.render("new", { loggedIn: false });
     }
 });
+
 app.get("/mail", function (req, res) {
     res.render("email");
 });
@@ -206,7 +219,7 @@ app.post("/", (req, res) => {
     let token = req.body.credential;
     console.log(token);
     async function verify() {
-        const ticket = await authLibraryClient.verifyIdToken({ // Use the authLibraryClient here
+        const ticket = await authLibraryClient.verifyIdToken({ // IMP Use the authLibraryClient here
             idToken: token,
             audience: '924859429110-4seosoqea4p90m82af8vr32jlltua24k.apps.googleusercontent.com',
         });
@@ -221,7 +234,7 @@ app.post("/", (req, res) => {
 });
 
 app.get("/documents", function (req, res) {
-    Booking.find({})
+    Booking.find({}).sort({ $natural: -1 })
         .then((ans) => {
             const convertedDates = ans.map((doc) => {
                 const startTime = moment
@@ -235,7 +248,7 @@ app.get("/documents", function (req, res) {
                 return { ...doc.toObject(), startTime, endTime };
             });
 
-            res.render("documents", { ans: convertedDates });
+            res.render("documents", { ans: convertedDates }); //Send back UTC to +5:30GMT to ALL Bookings
         })
         .catch((err) => {
             console.error("Error retrieving data:", err);
@@ -251,11 +264,13 @@ app.get("/manage", function (req, res) {
         title: "User Management | Admin Panel Tinkerers, IITGN",
     });
 });
+//API for Calender
 app.get("/all", function (req, res) {
     Booking.find({}).then((ans) => {
         const convertedDates = ans.map((doc) => {
             const id = doc._id;
             const title = doc.user;
+            const machine = doc.machine;
             const start = moment
                 .utc(doc.startTime)
                 .tz("Asia/Kolkata")
@@ -264,13 +279,13 @@ app.get("/all", function (req, res) {
                 .utc(doc.endTime)
                 .tz("Asia/Kolkata")
                 .format("YYYY-MM-DD HH:mm:ss");
-            return { id, title, start, end };
+            return { id, title, machine, start, end };
         });
 
         res.json(convertedDates);
     });
 });
-
+//Login Verification
 function checkAuthenticated(req, res, next) {
 
     let token = req.cookies['session-token'];

@@ -16,15 +16,17 @@
             width: 800px;
             height: 600px;
             position: relative;
+            border-radius: 20px;
+            border: 2px solid #4061e0;
             margin: 3% auto;
-            box-shadow: 2px 18px 70px 0px #9D9D9D;
+            /* box-shadow: 2px 18px 70px 0px #9D9D9D; */
             overflow: hidden;
         }
 
         .login-text {
             width: 800px;
             height: 450px;
-            background: #de67a3;
+            background: #4061e0;
             position: absolute;
             top: -300px;
             box-sizing: border-box;
@@ -123,9 +125,10 @@
         }
 
         .call-text h1 {
-            font-size: 42px;
+          
             margin-top: 10%;
-            color: #696a86;
+            font-weight: 400;
+            color: #000000;
         }
 
         .call-text h1 span {
@@ -242,20 +245,7 @@
                 margin-left: 30px;
             }
 
-            .cta {
-                width: 60px;
-                height: 60px;
-                border-radius: 50%;
-                background: #696a86;
-                border: 2px solid #fff;
-                position: absolute;
-                bottom: -30px;
-                left: 370px;
-                color: #fff;
-                outline: none;
-                cursor: pointer;
-                z-index: 11;
-            }
+            
 
             .call-text {
                 background-color: #fff;
@@ -290,13 +280,6 @@
                 outline: none;
             }
 
-            .show-hide {
-                display: block;
-            }
-
-            .expand {
-                transform: translateY(300px);
-            }
         }
     </style>
 </head>
@@ -304,8 +287,8 @@
 <body>
 
     <div id="g_id_onload" data-client_id="924859429110-4seosoqea4p90m82af8vr32jlltua24k.apps.googleusercontent.com"
-        data-context="signin" data-ux_mode="popup" data-login_uri="https://rich-cyan-bear-wear.cyclic.app/"
-        data-itp_support="true" data-skip_prompt_cookie="session-token">
+        data-context="signin" data-ux_mode="popup" data-login_uri="http://localhost:3000/" data-itp_support="true"
+        data-skip_prompt_cookie="session-token">
     </div>
 
 
