@@ -37,11 +37,27 @@ A new Booking system for Tinkerers' Lab, IITGN. Buit using Node.js, MongoDB and 
 ## New Features
 
 1. Revamped Confirmation Mail
+   
+   ![image](https://github.com/anmolkumr/New-TL-Booking/assets/77740197/63926c9f-5d18-460d-8ee8-8fcb9f5a255a)
+
 
 2. Realtime Slot Checking
+   
+   ![image](https://github.com/anmolkumr/New-TL-Booking/assets/77740197/c07047f6-0e08-4cf2-bcfa-3fccbb001132)
 
 3. Combined Centralized Form
+   
+   ![image](https://github.com/anmolkumr/New-TL-Booking/assets/77740197/96f72e23-2fa0-4f5e-98a1-3392376d725f)
+
 4. User-Friendly Admin Page
+   
+   ![image](https://github.com/anmolkumr/New-TL-Booking/assets/77740197/b1307dc2-73b1-4a93-84f6-02a72d3dfa5f)
+
+5. Custom Calender UI
+   ![image](https://github.com/anmolkumr/New-TL-Booking/assets/77740197/865d2762-d7af-4b1e-b79a-7404e4e4ebec)
+
+
+   
 
 ## Upcoming Features
 
