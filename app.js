@@ -194,7 +194,9 @@ app.post("/send-email", function (req, res) {
     main().catch(console.error);
 });
 
-
+app.get('/admin-login', function(req, res){
+    res.render('admin-login');
+})
 
 app.get("/new", checkAuthenticated, function (req, res) {
     if (req.user) {
