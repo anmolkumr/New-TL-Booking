@@ -7,6 +7,8 @@ require("moment-timezone");
 const ejs = require("ejs");
 const { google } = require("googleapis");
 const cookieParser = require('cookie-parser');
+const jwt = require('jsonwebtoken');
+const User = require('./models/user');
 
 
 const clientId = process.env.CLIENT_ID;
@@ -235,7 +237,7 @@ app.post("/", (req, res) => {
     }).catch(console.error);
 });
 
-app.get("/documents", function (req, res) {
+app.get("/documents", verifylogin,function (req, res) {
     Booking.find({}).sort({ $natural: -1 })
         .then((ans) => {
             const convertedDates = ans.map((doc) => {
@@ -257,11 +259,11 @@ app.get("/documents", function (req, res) {
             res.status(500).send("Error retrieving data");
         });
 });
-app.get("/admin", function (req, res) {
+app.get("/admin", verifylogin, function (req, res) {
     res.render("admin", { title: "Admin Panel Tinkerers, IITGN" });
 });
 
-app.get("/manage", function (req, res) {
+app.get("/manage", verifylogin,  function (req, res) {
     res.render("user-management", {
         title: "User Management | Admin Panel Tinkerers, IITGN",
     });
@@ -314,4 +316,49 @@ function checkAuthenticated(req, res, next) {
 
 }
 
+//Admin Login Signup
+
+app.post('/signup', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = new User({ email, password });
+        await user.save();
+        res.status(201).json({ message: 'User created successfully' });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+const JWT_SECRET = 'vvuh9uhyigphwcbwud82ti';
+app.post('/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(401).json({ message: 'Authentication failed' });
+        }
+        const isPasswordMatch = await user.comparePassword(password);
+        if (!isPasswordMatch) {
+            return res.status(401).json({ message: 'Authentication failed' });
+        }
+        const logintoken = jwt.sign({ userId: user._id }, JWT_SECRET);
+        res.cookie('login-token', logintoken)
+        res.json({ message: 'Login successful' });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+function verifylogin(req, res, next){
+    let logintoken = req.cookies['login-token'];
+
+    if (logintoken) {
+        next();
+        
+    } else {
+        res.redirect('admin-login')
+        
+    }
+
+}
 console.log("server listening at port 3000");

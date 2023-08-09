@@ -1,3 +1,35 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login and Signup</title>
+</head>
+
+<body>
+    <h1>Login and Signup</h1>
+
+    <div id="signup">
+        <h2>Sign Up</h2>
+        <input type="email" id="signup-email" placeholder="Email">
+        <input type="password" id="signup-password" placeholder="Password">
+        <button onclick="signup()">Sign Up</button>
+    </div>
+
+    <div id="login">
+        <h2>Login</h2>
+        <input type="email" id="login-email" placeholder="Email">
+        <input type="password" id="login-password" placeholder="Password">
+        <button onclick="login()">Login</button>
+    </div>
+
+   
+
+</body>
+
+</html> -->
+
 <!DOCTYPE html>
 <!-- Created by CodingLab |www.youtube.com/c/CodingLabYT-->
 <html lang="en" dir="ltr">
@@ -9,6 +41,8 @@
     <!-- Fontawesome CDN Link -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 </head>
 
 <body>
@@ -17,12 +51,12 @@
         <div class="cover">
             <div class="front">
                 <div class="text">
-                   
+
                 </div>
             </div>
             <div class="back">
                 <div class="text">
-                   
+
                 </div>
             </div>
         </div>
@@ -34,15 +68,16 @@
                         <div class="input-boxes">
                             <div class="input-box">
                                 <i class="fas fa-envelope"></i>
-                                <input type="text" placeholder="Enter your email" required>
+                                <input type="text" id="login-email" placeholder="Enter your email" required>
                             </div>
                             <div class="input-box">
                                 <i class="fas fa-lock"></i>
-                                <input type="password" placeholder="Enter your password" required>
+                                <input type="password" id="login-password" placeholder="Enter your password" required>
                             </div>
+                            <p id="message"></p>
                             <div class="text"><a href="#">Forgot password?</a></div>
                             <div class="button input-box">
-                                <input type="submit" value="Sumbit">
+                                <input onclick="login()" type="submit" value="Sumbit">
                             </div>
                             <div class="text sign-up-text">Don't have an account? <label for="flip">Sigup now</label>
                             </div>
@@ -54,20 +89,17 @@
                     <form action="#">
                         <div class="input-boxes">
                             <div class="input-box">
-                                <i class="fas fa-user"></i>
-                                <input type="text" placeholder="Enter your name" required>
-                            </div>
-                            <div class="input-box">
                                 <i class="fas fa-envelope"></i>
-                                <input type="text" placeholder="Enter your email" required>
+                                <input type="text"  id="signup-email"  placeholder="Enter your email" required>
                             </div>
                             <div class="input-box">
                                 <i class="fas fa-lock"></i>
-                                <input type="password" placeholder="Enter your password" required>
+                                <input type="password" id="signup-password" placeholder="Enter your password" required>
                             </div>
                             <div class="button input-box">
-                                <input type="submit" value="Sumbit">
+                                <input onclick="signup()" type="submit" value="Sumbit">
                             </div>
+                            <p id="message"></p>
                             <div class="text sign-up-text">Already have an account? <label for="flip">Login now</label>
                             </div>
                         </div>
@@ -76,6 +108,55 @@
             </div>
         </div>
     </div>
+    <script>
+        async function signup() {
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+
+            const response = await fetch('/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            const data = await response.json();
+            //document.getElementById('message').textContent = data.message;
+            Swal.fire(
+                'Login Successful',
+                'Welcome to TL Portal',
+                'success'
+            ).then(function () {
+                location.href='/admin'
+            });
+        }
+
+        async function login() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            const response = await fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email, password }),
+            });
+
+            const data = await response.json();
+            const message = data.message;
+             Swal.fire(
+                'Login Successful',
+                message,
+                'success'
+            ).then(function () {
+                location.href = '/admin'
+            });
+        }
+
+
+    </script>
 </body>
 
 </html>
