@@ -6,9 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <link rel="stylesheet" href="css/form.css">
-
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+  integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
 
   <script>
     function convertToUTCandSend() {
@@ -65,7 +68,61 @@
 </head>
 
 <body>
-  <h1 class="txt-center">TL Machine Booking</h1>
+
+  <div class="">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow">
+      <a class="navbar-brand" href="#">
+        <img src="\images\TL_logo.png" width="30" height="30" class="d-inline-block align-top" alt=""
+          style="margin-right:2px;">
+        Tinkerers' Lab
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+  
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="/booking">Booking Portal <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/events">Events</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/inventory">Inventory</a>
+          </li>
+          <!-- <li class="nav-item">
+              <a class="nav-link" href="/about">About Us</a>
+            </li> -->
+          <li class="nav-item">
+            <a class="nav-link" href="/contact">Contact</a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  </div>
+  
+  <!-- Top Container -->
+  <div class="small-space"></div>
+  <svg class="wave-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+    <path fill="#2D2F61" fill-opacity="0.9"
+      d="M0,64L10.9,69.3C21.8,75,44,85,65,112C87.3,139,109,181,131,208C152.7,235,175,245,196,213.3C218.2,181,240,107,262,80C283.6,53,305,75,327,85.3C349.1,96,371,96,393,90.7C414.5,85,436,75,458,74.7C480,75,502,85,524,80C545.5,75,567,53,589,58.7C610.9,64,633,96,655,117.3C676.4,139,698,149,720,133.3C741.8,117,764,75,785,80C807.3,85,829,139,851,165.3C872.7,192,895,192,916,186.7C938.2,181,960,171,982,138.7C1003.6,107,1025,53,1047,48C1069.1,43,1091,85,1113,106.7C1134.5,128,1156,128,1178,128C1200,128,1222,128,1244,133.3C1265.5,139,1287,149,1309,144C1330.9,139,1353,117,1375,112C1396.4,107,1418,117,1429,122.7L1440,128L1440,0L1429.1,0C1418.2,0,1396,0,1375,0C1352.7,0,1331,0,1309,0C1287.3,0,1265,0,1244,0C1221.8,0,1200,0,1178,0C1156.4,0,1135,0,1113,0C1090.9,0,1069,0,1047,0C1025.5,0,1004,0,982,0C960,0,938,0,916,0C894.5,0,873,0,851,0C829.1,0,807,0,785,0C763.6,0,742,0,720,0C698.2,0,676,0,655,0C632.7,0,611,0,589,0C567.3,0,545,0,524,0C501.8,0,480,0,458,0C436.4,0,415,0,393,0C370.9,0,349,0,327,0C305.5,0,284,0,262,0C240,0,218,0,196,0C174.5,0,153,0,131,0C109.1,0,87,0,65,0C43.6,0,22,0,11,0L0,0Z">
+    </path>
+  </svg>
+  
+  <div class="heading1 text-center shadow heading-otherpages-top">
+    <!-- <div class="egg-shape-1 long-text-1">
+        <div class="egg-shape-2 long-text-2"> -->
+  <%= machine %>
+    <!-- </div>
+      </div> -->
+  </div>
+
+  <h1 class="txt-center"></h1>
   <div class="align-center">
 
 

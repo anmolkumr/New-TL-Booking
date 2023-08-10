@@ -349,6 +349,14 @@ app.post('/login', async (req, res) => {
     }
 });
 
+app.get('/admin-logout', function(res,req){
+    res.clearCookie('login-token');
+    res.redirect('admin-login')
+})
+
+app.get('/admin-dashboard', function (res, req) {
+    res.redirect('dashboard')
+})
 function verifylogin(req, res, next){
     let logintoken = req.cookies['login-token'];
 
