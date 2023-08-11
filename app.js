@@ -273,8 +273,29 @@ app.get("/all", function (req, res) {
     Booking.find({}).then((ans) => {
         const convertedDates = ans.map((doc) => {
             const id = doc._id;
-            const title = doc.user;
-            const machine = doc.machine;
+            let title = doc.user;
+            let titleHTML = doc.machine;
+            console.log(titleHTML);
+            //title = title + " - " + machine;
+            //making case statements for machines
+            let backgroundColor = "#ffffff";
+            switch (titleHTML) {
+                case "3D Printer":
+                    titleHTML = `Booked For <div><span class="badge badge-pill badge-primary">${titleHTML}</span><br> By <span class="badge badge-pill badge-primary">${title}</span></div>`;
+                    backgroundColor = "#007bff";
+                    break;
+                case "Roland Vinyl Cutter":
+                    titleHTML = `Booked For <div><span class="badge badge-pill badge-success">${titleHTML}</span><br> By <span class="badge badge-pill badge-success">${title}</span></div>`;
+                    backgroundColor = "#28a745";
+                    break;
+                case "GCC Laser Cutting":
+                    titleHTML = `Booked For <div><span class="badge badge-pill badge-danger">${titleHTML}</span><br> By <span class="badge badge-pill badge-danger">${title}</span></div>`;
+                    backgroundColor = "#dc3545";
+                    break;
+                default:
+                    titleHTML = `Booked For <div><span class="badge badge-pill badge-warning">${titleHTML}</span><br> By <span class="badge badge-pill badge-warning">${title}</span></div>`;
+                    backgroundColor = "#ffc107";
+            }
             const start = moment
                 .utc(doc.startTime)
                 .tz("Asia/Kolkata")
@@ -283,7 +304,7 @@ app.get("/all", function (req, res) {
                 .utc(doc.endTime)
                 .tz("Asia/Kolkata")
                 .format("YYYY-MM-DD HH:mm:ss");
-            return { id, title, machine, start, end };
+            return { id, titleHTML, backgroundColor, start, end };
         });
 
         res.json(convertedDates);
