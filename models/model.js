@@ -8,6 +8,7 @@ const laserCuttingSchema = new mongoose.Schema({
     endTime: Date,
     description: String,
     status: String,
+    machine: String,
 });
 
 const LaserCutting = mongoose.model('LaserCutting', laserCuttingSchema, 'LaserCutting');
