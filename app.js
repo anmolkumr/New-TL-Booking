@@ -9,6 +9,7 @@ const { google } = require("googleapis");
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
 const User = require('./models/user');
+// const CustomModel = require('./models/previliged');
 
 
 const clientId = process.env.CLIENT_ID;
@@ -66,6 +67,7 @@ app.use(express.urlencoded({ extended: true }));
 
 //Routes
 app.post("/proceed_form", function (req, res) {
+
     var name = req.body.user;
     var email = req.body.email;
     var mobile = req.body.contact;
@@ -74,7 +76,7 @@ app.post("/proceed_form", function (req, res) {
     var end = new Date(req.body.utcEndTime);
     var desc = req.body.info;
     var status = req.body.status;
-
+ 
     const query = {
         status: "Approved",
         $or: [
@@ -95,22 +97,113 @@ app.post("/proceed_form", function (req, res) {
             res.send("Conflicting interval found. Please check Calender");
         } else {
             // No conflicts, Go for it!!
-            var data = {
-                user: name,
-                email: email,
-                phone: mobile,
-                machine: machine,
-                startTime: start,
-                endTime: end,
-                description: desc,
-                status: status,
-            };
-            db.collection(process.env.MONGODB_COLLECTION_NAME).insertOne(data, function (err, collection) {
-                if (err) throw err;
-                console.log("Record inserted Successfully");
-            });
+           
+            
+            db.collection('UserManage').findOne({ UserType: 'Privileged', emailID: email}, function (errors, privresult) {
+                if (errors) {
+                    console.log("Error finding email", err);
+                    return;
+                }
 
-            return res.send("Booking Completed!");
+                if (privresult) {
+                    var privmachine = req.body.machine;
+                    var privstart = new Date(req.body.utcStartTime);
+                    var privend = new Date(req.body.utcEndTime);
+
+                    var privdata = {
+                        user: name,
+                        email: email,
+                        phone: mobile,
+                        machine: privmachine,
+                        startTime: privstart,
+                        endTime: privend,
+                        description: desc,
+                        status: 'Approved',
+                    };
+                    
+                    db.collection(process.env.MONGODB_COLLECTION_NAME).insertOne(privdata, function (err, collection) {
+                        if (err) throw err;
+                        console.log("Priviledegef Record inserted Successfully");
+                    });
+
+                    console.log(req.body);
+
+                    const to = privdata.email;
+                    const cname = privdata.user;
+                    const machine = privdata.machine;
+                    const start = privdata.startTime;
+                    console.log(start);
+                    const end = privdata.endTime;
+                    console.log(end);
+
+                    // const { id, to, cname, machine, start, end, status } = req.body;
+                    const sub = `Confirmed Booking for ${to}`;
+                    const mailStartTime = moment(start).format("YYYY-MM-DD hh:mm A");
+                    console.log(mailStartTime);
+                    const mailEndTime = moment(end).format("YYYY-MM-DD hh:mm A");
+                    console.log(mailEndTime);
+
+                    if (!to) {
+                        return res.status(400).json({ error: "Missing required fields" });
+                    }
+
+                    async function main() {
+                        const html = await ejs.renderFile("views/email.ejs", {
+                            cname,
+                            machine,
+                            mailStartTime,
+                            mailEndTime,
+                        });
+                        const accessToken = await OAuth2Client.getAccessToken();
+                        var transporter = nodemailer.createTransport({
+                            service: "gmail",
+                            auth: {
+                                type: "OAuth2",
+                                user: "kumaranmol@iitgn.ac.in",
+                                clientId: clientId,
+                                clientSecret: clientSecret,
+                                refreshToken: refreshToken,
+                                accessToken: accessToken,
+                            },
+                        });
+
+                        const info = await transporter.sendMail({
+                            from: '"Tinkerers Lab Confirmation" <anmol4979199@gmail.com>',
+                            to: to,
+                            subject: sub,
+                            html: html,
+                        });
+                        console.log("Message sent: %s", info.messageId);
+                       
+
+                        // res.send({ message: "MAil Sent" });
+                    }
+                    main().catch(console.error);
+
+
+                    res.send("Confirmed!!");
+                }
+
+                else {
+                    var data = {
+                        user: name,
+                        email: email,
+                        phone: mobile,
+                        machine: machine,
+                        startTime: start,
+                        endTime: end,
+                        description: desc,
+                        status: status,
+                    };
+                    db.collection(process.env.MONGODB_COLLECTION_NAME).insertOne(data, function (err, collection) {
+                        if (err) throw err;
+                        console.log("Record inserted Successfully");
+                    });
+
+                    return res.send("Booking Completed!");
+                }
+
+            });
         }
     });
 });
@@ -119,12 +212,12 @@ app.get('/logout', (req, res) => {
     res.clearCookie('session-token');
     res.redirect('/')
 
-})
+});
 app.get('/booking_withoutLogin', (req, res) => {
 
     res.render('booking_withoutLogin')
 
-})
+});
 
 app.get("/", checkAuthenticated, function (req, res) {
     const formData = {
@@ -196,7 +289,7 @@ app.post("/send-email", function (req, res) {
     main().catch(console.error);
 });
 
-app.get('/admin-login', function(req, res){
+app.get('/admin-login', function (req, res) {
     res.render('admin-login');
 })
 
@@ -237,7 +330,7 @@ app.post("/", (req, res) => {
     }).catch(console.error);
 });
 
-app.get("/documents", verifylogin,function (req, res) {
+app.get("/documents", verifylogin, function (req, res) {
     Booking.find({}).sort({ $natural: -1 })
         .then((ans) => {
             const convertedDates = ans.map((doc) => {
@@ -263,7 +356,7 @@ app.get("/admin", verifylogin, function (req, res) {
     res.render("admin", { title: "Admin Panel Tinkerers, IITGN" });
 });
 
-app.get("/manage", verifylogin,  function (req, res) {
+app.get("/manage", verifylogin, function (req, res) {
     res.render("user-management", {
         title: "User Management | Admin Panel Tinkerers, IITGN",
     });
@@ -275,7 +368,7 @@ app.get("/all", function (req, res) {
             const id = doc._id;
             let title = doc.user;
             let titleHTML = doc.machine;
-            console.log(titleHTML);
+            // console.log(titleHTML);
             //title = title + " - " + machine;
             //making case statements for machines
             let backgroundColor = "#ffffff";
@@ -336,6 +429,7 @@ function checkAuthenticated(req, res, next) {
         })
 
 }
+//user-management
 
 //Admin Login Signup
 
@@ -349,6 +443,23 @@ app.post('/signup', async (req, res) => {
         res.status(400).json({ error: error.message });
     }
 });
+
+app.post('/add-user', function (req, res){
+    try {
+        const { email, type } = req.body;
+        var user = {
+            emailID: email,
+            UserType:type
+        }
+        db.collection('UserManage').insertOne(user, function (err, collection) {
+            if (err) throw err;
+            console.log("Added a User");
+            res.send('User created successfully')
+        });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+})
 
 const JWT_SECRET = 'vvuh9uhyigphwcbwud82ti';
 app.post('/login', async (req, res) => {
@@ -370,23 +481,46 @@ app.post('/login', async (req, res) => {
     }
 });
 
-app.get('/admin-logout', function(res,req){
+app.get("/all", verifylogin, function (req, res) {
+    Booking.find({}).sort({ $natural: -1 })
+        .then((ans) => {
+            const convertedDates = ans.map((doc) => {
+                const startTime = moment
+                    .utc(doc.startTime)
+                    .tz("Asia/Kolkata")
+                    .format("YYYY-MM-DD HH:mm:ss");
+                const endTime = moment
+                    .utc(doc.endTime)
+                    .tz("Asia/Kolkata")
+                    .format("YYYY-MM-DD HH:mm:ss");
+                return { ...doc.toObject(), startTime, endTime };
+            });
+
+            res.render("documents", { ans: convertedDates }); //Send back UTC to +5:30GMT to ALL Bookings
+        })
+        .catch((err) => {
+            console.error("Error retrieving data:", err);
+            res.status(500).send("Error retrieving data");
+        });
+});
+
+app.get('/admin-logout', (req, res) => {
     res.clearCookie('login-token');
-    res.redirect('admin-login')
-})
+    res.send('Logged OUT');
+});
 
 app.get('/admin-dashboard', function (res, req) {
     res.redirect('dashboard')
 })
-function verifylogin(req, res, next){
+function verifylogin(req, res, next) {
     let logintoken = req.cookies['login-token'];
 
     if (logintoken) {
         next();
-        
+
     } else {
         res.redirect('admin-login')
-        
+
     }
 
 }

@@ -9,6 +9,7 @@
     </title>
     <link rel="stylesheet" href="/css/form.css">
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet">
     <style>
 
@@ -42,12 +43,26 @@
                 </div>
             </div>
             <div><i class="lni lni-exit"></i>
-                <div onclick="location.href='/admin-logout'">
+                <div onclick="adminLogout()">
                     Logout
                 </div>
             </div>
         </div>
     </div>
+    <script>
+        function adminLogout() {
+            console.log('Clicked')
+            fetch('/admin-logout', { method: 'GET', credentials: 'same-origin' }).then(response => response.text())
+                .then(data => {
+                    Swal.fire({
+                        title: data,
+                        confirmButtonText: 'Okay'
+                    }).then(function () {
+                        location.href = '/admin-login'
+                    });
+                     })
+        }
+    </script>
 </body>
 
 </html>

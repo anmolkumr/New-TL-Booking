@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/css/form.css">
     <link rel="stylesheet" href="css/style.css">
     <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
 
@@ -20,14 +21,18 @@
         <button onclick="openModelUser()"><i class="lni lni-circle-plus"></i> <span>Add New</span></button>
 
         <div class="Model-box" id="Model-box" style="display: none;">
-            <form action="/blacklisted" method="post">
+            <form action="#">
                 <label for="email">Email of User</label><br>
-                <input type="email" name="black-email" id="b-email">
+                <input type="email" name="email" id="b-email">
 
                 <br><br>
-                <label for="email">Reason for Blacklisting</label><br>
-                <input type="text" name="black-reason" id="b-reason"><br><br>
-                <button type="submit">Submit</button>
+                <label for="b-type">User Type</label><br>
+                <select id="b-type" name="type">
+                    <option value=""></option>
+                    <option value="Privileged">Privileged</option>
+                    <option value="Blacklisted">Blacklisted</option>
+                </select><br><br>
+                <input onclick="userRole()" value="Submit" type="submit" >
             </form>
         </div>
 
@@ -37,6 +42,31 @@
             document.getElementById('Model-box').style.display = 'block';
 
         }
+       async function userRole(){
+         event.preventDefault();
+                const email = document.getElementById('b-email').value;
+                const type = document.getElementById('b-type').value;
+
+                const response = await fetch('/add-user', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, type }),
+                });
+                const data = await response.text();
+                console.log(data);
+                //document.getElementById('message').textContent = data.message;
+                Swal.fire(
+                    'Added',
+                    `${email} added Successfully`,
+                    'success'
+                ).then(function () {
+                    document.querySelector('form').reset();
+                });
+
+            }
+        
     </script>
 </body>
 

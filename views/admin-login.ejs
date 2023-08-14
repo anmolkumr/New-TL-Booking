@@ -109,30 +109,32 @@
         </div>
     </div>
     <script>
-        async function signup() {
-            const email = document.getElementById('signup-email').value;
-            const password = document.getElementById('signup-password').value;
+            async function signup() {
+                 event.preventDefault();
+                const email = document.getElementById('signup-email').value;
+                const password = document.getElementById('signup-password').value;
 
-            const response = await fetch('/signup', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email, password }),
-            });
+                const response = await fetch('/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password }),
+                });
 
-            const data = await response.json();
-            //document.getElementById('message').textContent = data.message;
-            Swal.fire(
-                'Login Successful',
-                'Welcome to TL Portal',
-                'success'
-            ).then(function () {
-                location.href='/admin'
-            });
-        }
+                const data = await response.json();
+                //document.getElementById('message').textContent = data.message;
+                Swal.fire(
+                    'Signup Successful',
+                    'Welcome to TL Portal',
+                    'success'
+                ).then(function () {
+                    location.href='/admin'
+                });
+            }
 
         async function login() {
+            event.preventDefault();
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
 
